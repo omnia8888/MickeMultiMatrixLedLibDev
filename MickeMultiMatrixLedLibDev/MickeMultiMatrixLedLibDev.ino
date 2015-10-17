@@ -10,8 +10,6 @@ Created:	10/8/2015 5:25:37 AM
 Author:	Micke
 */
 
-//We always have to include the library
-#include <LedControl.h>
 #include "MickeMultiMatrixLed.h"
 //#include "MatrixSymbols.h"
 
@@ -38,15 +36,15 @@ const byte maxDisplayNumIndex = (NUM_OF_DISPLAY_MODULES - 1);
 
 //Create instance of the public Arduino LedControl Library
 //Thats needed for Multi Matrix controller.
-LedControl lc = LedControl(12, 11, 10, NUM_OF_DISPLAY_MODULES);
 
 //Create Multi Matrix Ledcontrol object.
-MickeMultiMatrixLed mmML(lc);
+MickeMultiMatrixLed mmm = MickeMultiMatrixLed();
+
+
 
 // the setup function runs once when you press reset or power the board
 void setup()
 {
-
 
 
 	//For debugging
@@ -54,11 +52,13 @@ void setup()
 	delay(1000);
 
 	//Init Displays
-	mmML.initLedMatrix();
+	//mmML.initLedMatrix();
 
-	mmML.oneDot(1, 2, true);
 
-	mmML.displayDebugTestSym();
+	mmm.initMatrixDisplays(PIN_DATA_IN,PIN_CLK,PIN_LOAD,5);
+
+
+	
 	//int x, z;
 	//byte b;
 	//x = (33 + 256);
@@ -71,6 +71,12 @@ void setup()
 	//	Serial.println(b);
 	//}
 
+	mmm.oneDisplayRow(4, 4, B11111111);
+	byte r = 4, c = 20;
+	mmm.displayRow(r, c, B11111111);
+
+	//mmm.displayRow(6, 9, B11111111);
+
 }
 
 // the loop function runs over and over again until power down or reset
@@ -82,5 +88,19 @@ void loop()
 	//symbolToDisplay = symbolSun;
 
 	//mmML.displaySymbol(0, 4, symbolToDisplay, true);
+
+	//if you use more than one MAX7219, it should look like this
+
+	//mmm.maxAll(1, 1);                       //  + - - - - - - -
+	//mmm.maxAll(2, 3);                       //  + + - - - - - -
+	//mmm.maxAll(3, 7);                       //  + + + - - - - -
+	//mmm.maxAll(4, 15);                      //  + + + + - - - -
+	//mmm.maxAll(5, 31);                      //  + + + + + - - -
+	//mmm.maxAll(6, 63);                      //  + + + + + + - -
+	//mmm.maxAll(7, 127);                     //  + + + + + + + -
+	//mmm.maxAll(8, 255);                     //  + + + + + + + +
+
+	//mmm.oneDisplayRow(4, 4, B11011011);
+
 
 }

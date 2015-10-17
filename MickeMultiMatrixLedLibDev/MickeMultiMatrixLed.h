@@ -10,36 +10,71 @@
 	#include "WProgram.h"
 #endif
 
-
-#include <LedControl.h>
-
 /*Hardware dependent display module parameters*/
 #define LED_MATRIX_MODULE_ROWS 8 //Defines the number of rows on a single dot matrix module used
 #define LED_MATRIX_MODULE_COLUMNS 8 //Defines the number of columns on a single dot matrix module used
 
-class MickeMultiMatrixLed:LedControl
+class MickeMultiMatrixLed
 {
  protected:
 
 
  public:
-	 MickeMultiMatrixLed(LedControl);
+	 MickeMultiMatrixLed();
 
-	 void displayDebugTestSym();
+	void putByte(byte data);
+	
+	//void maxSingle(byte reg, byte col);
 
-	 void initLedMatrix();
+	void maxAll(byte reg, byte col);
+
+	//void maxOne(byte maxNr, byte reg, byte col);
+	
+	void oneDisplayRow(byte displ,byte row,byte value);
+	
+	//void displayDebugTestSym();
+
+	 void initMatrixDisplays(byte dataPin,byte clkPin, byte csPin,byte count, byte intens=8);
+
+	 //void initLedMatrix();
 
 	void displaySymbol(byte row, byte col, byte *symbol, bool visable);
 
-	void displaySingleRow(byte row, byte col, byte value);
+	void displayRow(byte row, byte col, byte value);
 
-	void oneDot(byte row, byte col, bool state);
+	
+	//void oneDot(byte row, byte col, bool state);
+
 
 private:
 
 	//const byte maxDisplayNumIndex = (NUM_OF_DISPLAY_MODULES - 1);
 	const byte maxSingleRowIndex = (LED_MATRIX_MODULE_ROWS - 1);
 	const byte maxSingleColIndex = (LED_MATRIX_MODULE_COLUMNS - 1);
+
+	int dataIn = 12;
+	int load = 10;
+	int clock = 11;
+
+	int maxInUse = 5;    //change this variable to set how many MAX7219's you'll use
+
+	int e = 0;           // just a variable
+
+	// define max7219 registers
+	byte max7219_reg_noop = 0x00;
+	byte max7219_reg_digit0 = 0x01;
+	byte max7219_reg_digit1 = 0x02;
+	byte max7219_reg_digit2 = 0x03;
+	byte max7219_reg_digit3 = 0x04;
+	byte max7219_reg_digit4 = 0x05;
+	byte max7219_reg_digit5 = 0x06;
+	byte max7219_reg_digit6 = 0x07;
+	byte max7219_reg_digit7 = 0x08;
+	byte max7219_reg_decodeMode = 0x09;
+	byte max7219_reg_intensity = 0x0a;
+	byte max7219_reg_scanLimit = 0x0b;
+	byte max7219_reg_shutdown = 0x0c;
+	byte max7219_reg_displayTest = 0x0f;
 
 };
 
