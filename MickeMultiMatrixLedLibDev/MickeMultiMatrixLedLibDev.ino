@@ -4,24 +4,8 @@
  Author:	Micke
 */
 
-/*
-Name:		MatrixTemperature.ino
-Created:	10/8/2015 5:25:37 AM
-Author:	Micke
-*/
 
 #include "MickeMultiMatrixLed.h"
-//#include "MatrixSymbols.h"
-
-
-/*
-Now we need a LedControl to work with.
-***** These pin numbers will probably not work with your hardware *****
-pin 12 is connected to the DataIn
-pin 11 is connected to the CLK
-pin 10 is connected to LOAD
-We have only a single MAX72XX.
-*/
 
 /*Hardware dependent defines:
 Pin configurations for the daisychained MAX72XX* devices with Matrix Led displays*/
@@ -38,9 +22,7 @@ const byte maxDisplayNumIndex = (NUM_OF_DISPLAY_MODULES - 1);
 //Thats needed for Multi Matrix controller.
 
 //Create Multi Matrix Ledcontrol object.
-MickeMultiMatrixLed mmm = MickeMultiMatrixLed();
-
-
+MickeMultiMatrixLed mmm(PIN_DATA_IN,PIN_CLK,PIN_LOAD,NUM_OF_DISPLAY_MODULES);
 
 // the setup function runs once when you press reset or power the board
 void setup()
@@ -52,10 +34,7 @@ void setup()
 	delay(1000);
 
 	//Init Displays
-	//mmML.initLedMatrix();
-
-
-	mmm.initMatrixDisplays(PIN_DATA_IN,PIN_CLK,PIN_LOAD,5);
+	mmm.initMatrixDisplays();
 
 
 	
@@ -72,8 +51,8 @@ void setup()
 	//}
 
 	mmm.oneDisplayRow(4, 4, B11111111);
-	byte r = 4, c = 20;
-	mmm.displayRow(r, c, B11111111);
+	byte r = 7, c = 22;
+	mmm.displayRow(r, c, B11011011);
 
 	//mmm.displayRow(6, 9, B11111111);
 

@@ -20,7 +20,7 @@ class MickeMultiMatrixLed
 
 
  public:
-	 MickeMultiMatrixLed();
+	 MickeMultiMatrixLed(byte dataPin, byte clkPin, byte csPin, byte numOfDisplays);
 
 	void putByte(byte data);
 	
@@ -34,7 +34,7 @@ class MickeMultiMatrixLed
 	
 	//void displayDebugTestSym();
 
-	 void initMatrixDisplays(byte dataPin,byte clkPin, byte csPin,byte count, byte intens=8);
+	 void initMatrixDisplays(byte intens=8);
 
 	 //void initLedMatrix();
 
@@ -52,13 +52,10 @@ private:
 	const byte maxSingleRowIndex = (LED_MATRIX_MODULE_ROWS - 1);
 	const byte maxSingleColIndex = (LED_MATRIX_MODULE_COLUMNS - 1);
 
-	int dataIn = 12;
-	int load = 10;
-	int clock = 11;
-
-	int maxInUse = 5;    //change this variable to set how many MAX7219's you'll use
-
-	int e = 0;           // just a variable
+	int _pinClk;
+	int _pinData;
+	int _pinLoad;
+	int _numOfdisplays;
 
 	// define max7219 registers
 	byte max7219_reg_noop = 0x00;

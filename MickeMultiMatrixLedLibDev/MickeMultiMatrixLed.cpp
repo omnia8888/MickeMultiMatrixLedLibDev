@@ -5,9 +5,12 @@
 #include "MickeMultiMatrixLed.h"
 #include "MatrixSymbols.h"
 
-MickeMultiMatrixLed::MickeMultiMatrixLed()
+MickeMultiMatrixLed::MickeMultiMatrixLed(byte dataPin, byte clkPin, byte csPin, byte numOfDisplays)
 {
-
+	_pinData = dataPin;
+	_pinClk = clkPin;
+	_pinLoad = csPin;
+	_numOfdisplays = numOfDisplays;
 }
 
 
@@ -19,12 +22,12 @@ controlling MAX7219 units with Parameters:
 * csPin		pin for selecting the device
 * numDevices	maximum number of devices that can be controled
 * displayIntens	Set the initial display brightness*/
-void MickeMultiMatrixLed::initMatrixDisplays(byte dataPin, byte clkPin, byte csPin, byte displCount, byte displIntens)
+void MickeMultiMatrixLed::initMatrixDisplays(byte displIntens)
 {
 
-	pinMode(dataPin, OUTPUT);
-	pinMode(clkPin, OUTPUT);
-	pinMode(csPin, OUTPUT);
+	pinMode(_pinData, OUTPUT);
+	pinMode(_pinClk, OUTPUT);
+	pinMode(_pinLoad, OUTPUT);
 
 
 	//initiation of the max 7219
@@ -33,7 +36,7 @@ void MickeMultiMatrixLed::initMatrixDisplays(byte dataPin, byte clkPin, byte csP
 	maxAll(max7219_reg_shutdown, 0x01);    // not in shutdown mode
 	maxAll(max7219_reg_displayTest, 0x00); // no display test
 
-	for (e = 1; e <= 8; e++)
+	for (byte e = 1; e <= 8; e++)
 	{    // empty registers, turn all LEDs off 
 		maxAll(e, 0);
 	}
@@ -121,16 +124,16 @@ void MickeMultiMatrixLed::putByte(byte data)
 	while (i > 0)
 	{
 		mask = 0x01 << (i - 1);      // get bitmask
-		digitalWrite(clock, LOW);   // tick
+		digitalWrite(_pinClk, LOW);   // tick
 		if (data & mask)
 		{            // choose bit
-			digitalWrite(dataIn, HIGH);// send 1
+			digitalWrite(_pinData, HIGH);// send 1
 		}
 		else
 		{
-			digitalWrite(dataIn, LOW); // send 0
+			digitalWrite(_pinData, LOW); // send 0
 		}
-		digitalWrite(clock, HIGH);   // tock
+		digitalWrite(_pinClk, HIGH);   // tock
 		--i;                         // move to lesser bit
 	}
 }
@@ -138,22 +141,22 @@ void MickeMultiMatrixLed::putByte(byte data)
 void MickeMultiMatrixLed::maxAll(byte reg, byte col)
 {    // initialize  all  MAX7219's in the system
 	int c = 0;
-	digitalWrite(load, LOW);  // begin     
-	for (c = 1; c <= maxInUse; c++)
+	digitalWrite(_pinLoad, LOW);  // begin     
+	for (c = 1; c <= _numOfdisplays; c++)
 	{
 		putByte(reg);  // specify register
 		putByte(col);//((data & 0x01) * 256) + data >> 1); // put data
 	}
-	digitalWrite(load, LOW);
-	digitalWrite(load, HIGH);
+	digitalWrite(_pinLoad, LOW);
+	digitalWrite(_pinLoad, HIGH);
 }
 
 void MickeMultiMatrixLed::oneDisplayRow(byte displ, byte row, byte value)
 {
 	int c = 0;
-	digitalWrite(load, LOW);  // begin     
+	digitalWrite(_pinLoad, LOW);  // begin     
 
-	for (c = maxInUse; c > displ; c--)
+	for (c = _numOfdisplays; c > displ; c--)
 	{
 		putByte(0);    // means no operation
 		putByte(0);    // means no operation
@@ -168,8 +171,8 @@ void MickeMultiMatrixLed::oneDisplayRow(byte displ, byte row, byte value)
 		putByte(0);    // means no operation
 	}
 
-	digitalWrite(load, LOW); // and load da stuff
-	digitalWrite(load, HIGH);
+	digitalWrite(_pinLoad, LOW); // and load da stuff
+	digitalWrite(_pinLoad, HIGH);
 }
 
 

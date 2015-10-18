@@ -21,10 +21,10 @@
     <ClInclude Include="__vm\.MickeMultiMatrixLedLibDev.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MatrixSymbols.h">
+    <ClInclude Include="MickeMultiMatrixLed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MickeMultiMatrixLed.h">
+    <ClInclude Include="MatrixSymbolsTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
